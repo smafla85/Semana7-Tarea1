@@ -1,0 +1,85 @@
+<div class="container">
+  <h2 class="mb-4">Nueva Factura FPDF</h2>
+  <form [formGroup]="facturaForm">
+    <div class="form-group mb-3">
+      <label for="cliente_id">Seleccione un cliente:</label>
+      <select id="cliente_id" formControlName="cliente_id" class="form-control" (change)="onClienteChange()">
+        <option value="">Seleccione un cliente</option>
+        @for (cliente of clientes; track cliente.idClientes) {
+          <option [value]="cliente.idClientes">
+            {{ cliente.Nombres }} - {{ cliente.Cedula }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <h3>Agregar Producto</h3>
+    <div class="row">
+      <div class="col">
+        <select formControlName="producto_id" class="form-control">
+          <option value="">Seleccione un producto</option>
+          @for (producto of productos; track producto.idProductos) {
+            <option [value]="producto.idProductos">
+              {{ producto.Nombre_Producto }} - ${{ producto.Valor_Venta }}
+            </option>
+          }
+        </select>
+      </div>
+      <div class="col">
+        <input type="number" formControlName="cantidad" class="form-control" placeholder="Cantidad">
+      </div>
+      <div class="col-auto">
+        <button type="button" class="btn btn-primary" (click)="agregarProducto()">Agregar</button>
+      </div>
+    </div>
+  </form>
+
+  @if (mostrarPreview) {
+    <div class="mt-4">
+      <h3>Previsualización de Factura</h3>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Cliente: {{ clienteSeleccionado?.Nombres }}</h5>
+          <p>CI/RUC: {{ clienteSeleccionado?.Cedula }}</p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Total</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (producto of productosSeleccionados; track $index) {
+                <tr>
+                  <td>{{ producto.Nombre_Producto }}</td>
+                  <td>{{ producto.cantidadSeleccionada }}</td>
+                  <td>{{ producto.Valor_Venta | currency }}</td>
+                  <td>{{ producto.totalProducto | currency }}</td>
+                  <td>
+                    <button class="btn btn-danger btn-sm" (click)="eliminarProducto($index)">Eliminar</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <div class="text-end">
+            <p><strong>Subtotal:</strong> {{ subtotal | currency }}</p>
+            <p><strong>IVA:</strong> {{ iva | currency }}</p>
+            <p><strong>Total:</strong> {{ total | currency }}</p>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-success mt-3" (click)="generarFacturaPDF()">Generar Factura PDF</button>
+    </div>
+  }
+
+  @if (pdfUrl) {
+    <div class="mt-4">
+      <p class="alert alert-success">La factura PDF se ha generado correctamente.</p>
+      <a [href]="pdfUrl" target="_blank" class="btn btn-secondary">Ver PDF</a>
+    </div>
+  }
+</div>

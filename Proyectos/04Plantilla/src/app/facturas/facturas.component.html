@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="col-md-12 col-xl-8">
+      <div id="nuevo-factura" class="mb-3">
+        <a [routerLink]="['/nuevafactura']" class="btn btn-outline-dark mr-2">Nueva Factura</a>
+        <a [routerLink]="['/nuevafacturafpdf']" class="btn btn-outline-dark mr-2">Nueva FacturaFPDF</a>
+      </div>
+
+      <div class="card tbl-card">
+        <div class="card-header">
+          <h5>Listado de Facturas</h5>
+        </div>
+
+        <div class="card-body table-border-style">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Factura</th>
+                  <th>Cliente</th>
+                  <th>Total</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (factura of listafacturas; track $index) {
+                  <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>000{{ factura.idFactura }}</td>
+                    <td>{{ factura.Nombres }}</td>
+                    <td>{{ factura.total | currency:'USD':'symbol':'1.2-2' }}</td>
+                    <td>
+                      <button class="btn btn-primary btn-sm mr-1" [routerLink]="['/editarfactura', factura.idFactura]">
+                        Editar
+                      </button>
+                      <button class="btn btn-danger btn-sm" (click)="eliminar(factura.idFactura)">
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
