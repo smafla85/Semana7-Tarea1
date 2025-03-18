@@ -72,6 +72,7 @@ switch ($_GET["op"]) {
             echo json_encode(["error" => "Missing required parameters."]);
             exit();
         }
+    
 
         $idClientes = intval($_POST["idClientes"]);
         $Nombres = $_POST["Nombres"];
